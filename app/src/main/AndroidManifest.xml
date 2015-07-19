@@ -45,6 +45,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AddBikeActivity"/>
+
         <!-- <activity android:name=".BraintreeActivity" -->
         <!-- android:label="Get Name" -->
         <!-- android:theme="@style/AppTheme"/> -->
