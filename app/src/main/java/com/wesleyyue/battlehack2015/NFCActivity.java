@@ -42,15 +42,27 @@ public class NFCActivity extends Activity {
         setContentView(R.layout.activity_nfc);
 
         nfcDevice = NfcAdapter.getDefaultAdapter(this);
+
         nfcDevice.setNdefPushMessageCallback(new CreateNdefMessageCallback() {
             @Override
             public NdefMessage createNdefMessage(NfcEvent event) {
-                NdefRecord uriRecord = NdefRecord.createUri(Uri.encode("AYYEE IT WORKS!"));
+                NdefRecord uriRecord = NdefRecord.createUri(Uri.encode("21"));
                 return new NdefMessage(new NdefRecord[]{uriRecord});
             }
 
         }, this, this);
 
+        TextView text = (TextView) findViewById(R.id.info);
+        Bundle b = getIntent().getExtras();
+        int value = b.getInt("lock");
+
+
+
+        if(value == 1){
+            text.setText("Put your phone up to the lock to lock your bike.");
+        } else {
+            text.setText("Put your phone up to the lock to unlock your bike.");
+        }
     }
 
     @Override

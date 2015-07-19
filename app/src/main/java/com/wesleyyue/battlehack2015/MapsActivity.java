@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.braintreepayments.api.dropin.BraintreePaymentActivity;
@@ -46,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     private static final int info_pane_height = 1100;
     private static final int peeking_height = 300;
     private static final int expanded_height = info_pane_height - peeking_height;
+    private boolean in_rent_mode = false;
 
     HashMap<String, ParseObject> marker_info;
 
@@ -56,6 +58,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     TextView review1author;
     TextView review2author;
     TextView review3author;
+
+    Button rentbtn;
 
 
     @Override
@@ -73,6 +77,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         review1author = (TextView)findViewById(R.id.review1author);
         review2author = (TextView)findViewById(R.id.review2author);
         review3author = (TextView)findViewById(R.id.review3author);
+        rentbtn = (Button)findViewById(R.id.rentBtn);
+
 
 
         // Enable Local Datastore.
@@ -212,6 +218,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         // TODO: start renting view
+                        othernfc();
                     }
 
                     @Override
@@ -229,9 +236,37 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     // End of braintree code
 
     public void nfcActivity (View view) {
-        Intent intent = new Intent(this, NFCActivity.class);
-        startActivity(intent);
+        if (in_rent_mode){
+            in_rent_mode = false;
+            Intent intent = new Intent(this, BraintreePaymentActivity.class);
+            intent.putExtra(BraintreePaymentActivity.EXTRA_CLIENT_TOKEN, braintree_token);
+            startActivityForResult(intent, BRAINTREE_REQUEST_CODE);
+
+        } else {
+            ParseObject bike_rides = new ParseObject("bike_rides");
+            bike_rides.put("user_id", 1);
+            bike_rides.saveInBackground();
+            in_rent_mode = true;
+            rentbtn.setText("End rental");
+            Intent intent = new Intent(this, NFCActivity.class);
+            Bundle b = new Bundle();
+            b.putInt("lock", 0); //Your id
+            intent.putExtras(b); //Put your id to your next Intent
+            startActivity(intent);
+        }
+
+
     }
+    public void othernfc() {
+        Intent intent = new Intent(this, NFCActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("lock", 1); //Your id
+        intent.putExtras(b); //Put your id to your next Intent
+        startActivity(intent);
+        rentbtn.setText("Rent");
+    }
+
+
 
 
     @Override
