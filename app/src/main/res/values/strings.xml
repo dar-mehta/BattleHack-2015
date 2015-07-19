@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BattleHack2015</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_nfc">NFCActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+</resources>
