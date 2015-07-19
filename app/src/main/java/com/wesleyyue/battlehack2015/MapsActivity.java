@@ -35,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     private static boolean expanded_info_pane = false;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
