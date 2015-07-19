@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.braintreepayments.api.dropin.BraintreePaymentActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,7 +25,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -60,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     TextView review3author;
 
     Button rentbtn;
+    RatingBar ratingBar;
+    LinearLayout incurred_charge;
 
 
     @Override
@@ -78,6 +81,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         review2author = (TextView)findViewById(R.id.review2author);
         review3author = (TextView)findViewById(R.id.review3author);
         rentbtn = (Button)findViewById(R.id.rentBtn);
+        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+        incurred_charge = (LinearLayout) findViewById(R.id.incurred_charge);
 
 
 
@@ -86,7 +91,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         Parse.initialize(this, "m62ASk25Hb1HaaMBWUQ6XeI7VKcbTn1A0g1KDtZp", "DaAlxgusMVeMn6fo05UMVF9lTwlZy2VCXa59BMgB");
 
         marker_info = new HashMap<String, ParseObject>();
-
 
         setUpMapIfNeeded();
 
@@ -142,6 +146,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
                 setUpMap();
             }
         }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.661036, -79.391857), 13f), 4000, null);
+
     }
 
     /**
@@ -252,8 +259,19 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
             Bundle b = new Bundle();
             b.putInt("lock", 0); //Your id
             intent.putExtras(b); //Put your id to your next Intent
+            refreshUIForRentMode();
             startActivity(intent);
         }
+
+
+    }
+
+    private void refreshUIForRentMode(){
+        rentbtn.setText("End rental");
+        ratingBar.setVisibility(View.GONE);
+        incurred_charge.setVisibility(View.VISIBLE);
+//        BottomSlideOut.setBackgroundResource(R.drawable.bg_shadow_red);
+//        rentbtn.setBackgroundColor(0xF44336);
 
 
     }
@@ -264,9 +282,11 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         intent.putExtras(b); //Put your id to your next Intent
         startActivity(intent);
         rentbtn.setText("Rent");
+//        rentbtn.setBackgroundColor(0xd3d3d3);
+        incurred_charge.setVisibility(View.GONE);
+        ratingBar.setVisibility(View.VISIBLE);
+//        BottomSlideOut.setBackgroundResource(R.drawable.bg_shadow);
     }
-
-
 
 
     @Override
