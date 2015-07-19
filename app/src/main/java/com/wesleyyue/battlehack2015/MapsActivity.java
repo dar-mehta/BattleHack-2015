@@ -1,15 +1,20 @@
 package com.wesleyyue.battlehack2015;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import com.braintreepayments.api.dropin.BraintreePaymentActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -19,12 +24,16 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.apache.http.Header;
 
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private String braintree_token;
     private static String server_domain = "http://mighty-retreat-5059.herokuapp.com";
     private static final int BRAINTREE_REQUEST_CODE = 100;
+    private View BottomSlideOut;
+    private static boolean peeking_info_pane = false;
+    private static boolean expanded_info_pane = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,22 @@ public class MapsActivity extends FragmentActivity {
         setUpMapIfNeeded();
 
         getToken();
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
+
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int window_width = size.x;
+        int window_height = size.y;
+
+
+        BottomSlideOut = findViewById(R.id.BottomSlideOut);
+        BottomSlideOut.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Log.d("bottomHeight", "height = " + window_height);
+        BottomSlideOut.setTranslationY(window_height);
+        BottomSlideOut.animate().setInterpolator(new DecelerateInterpolator()).setDuration(200);
     }
 
     @Override
@@ -136,8 +161,37 @@ public class MapsActivity extends FragmentActivity {
     }
     // End of braintree code
 
-    public void nfcActivity (View view){
+    public void nfcActivity (View view) {
         Intent intent = new Intent(this, NFCActivity.class);
         startActivity(intent);
+    }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (!peeking_info_pane){
+            BottomSlideOut.animate().translationYBy(-400);
+            peeking_info_pane = true;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if (peeking_info_pane){
+            BottomSlideOut.animate().translationYBy(400);
+            peeking_info_pane = false;
+        }
+    }
+
+    public void toggleExpandInfoPane(View view) {
+        if(expanded_info_pane){
+            BottomSlideOut.animate().translationYBy(700);
+        }else{
+            BottomSlideOut.animate().translationYBy(-700);
+        }
+
+        expanded_info_pane = !expanded_info_pane;
     }
 }
