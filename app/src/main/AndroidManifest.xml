@@ -34,6 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<activity android:name=".BraintreeActivity"-->
+            <!--android:label="Get Name"-->
+            <!--android:theme="@style/AppTheme"/>-->
     </application>
 
 </manifest>
