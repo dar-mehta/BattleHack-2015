@@ -1,13 +1,17 @@
 package com.wesleyyue.battlehack2015;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter.ReaderCallback;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.nfc.Tag;
 import android.os.Build;
@@ -17,12 +21,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.paypal.android.sdk.ab;
+
+import java.util.Arrays;
 
 
-public class NFCActivity extends ActionBarActivity{
+public class NFCActivity extends Activity {
 
-    private static final String TAG = "anything";
     NfcAdapter nfcDevice;
 
 
@@ -31,8 +40,9 @@ public class NFCActivity extends ActionBarActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
+
         nfcDevice = NfcAdapter.getDefaultAdapter(this);
-        nfcDevice.setNdefPushMessageCallback(new NfcAdapter.CreateNdefMessageCallback() {
+        nfcDevice.setNdefPushMessageCallback(new CreateNdefMessageCallback() {
             @Override
             public NdefMessage createNdefMessage(NfcEvent event) {
                 NdefRecord uriRecord = NdefRecord.createUri(Uri.encode("AYYEE IT WORKS!"));
@@ -42,6 +52,23 @@ public class NFCActivity extends ActionBarActivity{
         }, this, this);
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

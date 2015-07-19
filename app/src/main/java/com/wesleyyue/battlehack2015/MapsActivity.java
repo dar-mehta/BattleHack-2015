@@ -57,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     TextView review2author;
     TextView review3author;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
