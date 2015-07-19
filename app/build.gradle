@@ -33,4 +33,10 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
 
+    // Braintree
+    compile 'com.braintreepayments.api:braintree:1.+'
+
+// HTTP Async
+    compile 'com.loopj.android:android-async-http:1.4.8'
+
 }
