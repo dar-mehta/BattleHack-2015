@@ -25,18 +25,36 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
                 android:text="Rent"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/hourlyRate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:gravity="center|center"
                 android:text="$5/hr"
                 android:textColor="@color/material_blue_grey_950"
                 android:textSize="25sp" />
 
+            <RatingBar
+                android:id="@+id/listitemrating"
+                style="@android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="22dp"
+                android:stepSize="1.0"
+                android:rating="2.0"
+                android:scaleX=".5"
+                android:scaleY=".5"
+                android:transformPivotX="0dp"
+                android:transformPivotY="0dp"
+                android:isIndicator="true"
+                android:max="5" />
 
         </RelativeLayout>
 
