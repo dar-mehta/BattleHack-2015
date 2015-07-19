@@ -60,7 +60,7 @@
                 android:id="@+id/bikeImage"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:src="@drawable/logo"
+                android:src="@drawable/example"
                 />
         </RelativeLayout>
 
