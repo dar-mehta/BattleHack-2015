@@ -16,50 +16,145 @@
     <RelativeLayout
         android:id="@+id/BottomSlideOut"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="1100dp"
         android:background="@drawable/bg_shadow"
         android:onClick="toggleExpandInfoPane">
-        <Button
-            android:id="@+id/rentBtn"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="Rent"
-            android:textSize="16sp"
-            android:onClick="onBraintreeSubmit"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/infoPaneFirstRow"
+            android:paddingTop="5dp"
+            android:paddingBottom="9dp"
+            >
 
-        <!--<TextView-->
-            <!--android:id="@+id/hourlyRate"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:gravity="center|center"-->
-            <!--android:text="$5/hr"-->
-            <!--android:textColor="@color/material_blue_grey_950"-->
-            <!--android:textSize="25sp" />-->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1.0"
+                    android:rating="4.0"
+                    android:isIndicator="true"
+                    android:max="5"
+                    android:layout_marginTop="23dp"
+                    />
 
-        <!--<RatingBar-->
-            <!--android:id="@+id/ratingBar"-->
-            <!--style="?android:attr/ratingBarStyleSmall"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_marginTop="22dp"-->
-            <!--android:stepSize="1.0"-->
-            <!--android:rating="2.0"-->
-            <!--android:scaleX=".5"-->
-            <!--android:scaleY=".5"-->
-            <!--android:transformPivotX="0dp"-->
-            <!--android:transformPivotY="0dp"-->
-            <!--android:isIndicator="true"-->
-            <!--android:max="5" />-->
+            </RelativeLayout>
 
-        <!--<ImageButton-->
-            <!--android:id="@+id/bikeImage"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="25dp"-->
-            <!--android:src="@drawable/example"-->
-            <!--/>-->
+            <TextView
+                android:id="@+id/hourlyRate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="$5/hr"
+                android:textColor="@color/material_blue_grey_950"
+                android:textSize="25sp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                />
+
+
+            <Button
+                android:id="@+id/rentBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Rent"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:onClick="onBraintreeSubmit"/>
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:id="@+id/infoPaneSecondRow"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_below="@+id/infoPaneFirstRow"
+            >
+            
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviewContainer"
+                >
+                <TextView
+                    android:id="@+id/review1"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."/>
+
+                <TextView
+                    android:id="@+id/review1author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:text="- Joseph"
+                    android:layout_gravity="right"
+                    android:paddingBottom="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/review2"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."/>
+
+                <TextView
+                    android:id="@+id/review2author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:text="- Joseph"
+                    android:layout_gravity="right"
+                    android:paddingBottom="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/review3"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."/>
+
+
+                <TextView
+                    android:id="@+id/review3author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:text="- Joseph"
+                    android:layout_gravity="right"
+                    android:paddingBottom="10dp"
+                    />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/bikeImage"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/example"
+                android:layout_toRightOf="@+id/reviewContainer"
+                android:paddingLeft="10dp"
+                />
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:text="Note: Has cool leds!"
+                android:layout_below="@+id/bikeImage"
+                android:layout_toRightOf="@+id/reviewContainer"
+                android:paddingLeft="10dp"
+                />
+
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

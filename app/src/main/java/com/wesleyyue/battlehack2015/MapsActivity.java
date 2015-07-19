@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 
 import com.braintreepayments.api.dropin.BraintreePaymentActivity;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,8 +21,17 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.apache.http.Header;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener{
@@ -33,12 +43,44 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     private View BottomSlideOut;
     private static boolean peeking_info_pane = false;
     private static boolean expanded_info_pane = false;
+    private static final int info_pane_height = 1100;
+    private static final int peeking_height = 300;
+    private static final int expanded_height = info_pane_height - peeking_height;
 
+    HashMap<String, ParseObject> marker_info;
+
+    TextView hourlyRate;
+    TextView review1;
+    TextView review2;
+    TextView review3;
+    TextView review1author;
+    TextView review2author;
+    TextView review3author;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+
+
+        hourlyRate = (TextView)findViewById(R.id.hourlyRate);
+        review1 = (TextView)findViewById(R.id.review1);
+        review2 = (TextView)findViewById(R.id.review2);
+        review3 = (TextView)findViewById(R.id.review3);
+        review1author = (TextView)findViewById(R.id.review1author);
+        review2author = (TextView)findViewById(R.id.review2author);
+        review3author = (TextView)findViewById(R.id.review3author);
+
+
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "m62ASk25Hb1HaaMBWUQ6XeI7VKcbTn1A0g1KDtZp", "DaAlxgusMVeMn6fo05UMVF9lTwlZy2VCXa59BMgB");
+
+        marker_info = new HashMap<String, ParseObject>();
+
+
         setUpMapIfNeeded();
 
         getToken();
@@ -58,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         Log.d("bottomHeight", "height = " + window_height);
         BottomSlideOut.setTranslationY(window_height);
         BottomSlideOut.animate().setInterpolator(new DecelerateInterpolator()).setDuration(200);
+
     }
 
     @Override
@@ -101,7 +144,30 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Bikes");
+//        query.whereEqualTo("playerName", "Dan Stemkoski");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> scoreList, ParseException e) {
+                if (e == null) {
+                    for (ParseObject object : scoreList) {
+                        Log.d("score", "here: " + object.getDouble("lon"));
+                        double lon = object.getDouble("lon");
+                        double lat = object.getDouble("lat");
+
+//                        Log.d("hmtesting", object.getObjectId());
+
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(lon, lat)).title(object.getObjectId()));
+                        marker_info.put(object.getObjectId(), object);
+                    }
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     // Braintree
@@ -169,8 +235,20 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        ParseObject current_marker_info = marker_info.get(marker.getTitle());
+        Log.d("hmtesting", current_marker_info.getObjectId());
+
+        hourlyRate.setText("$" + current_marker_info.getNumber("rate") + "/hr");
+        review1.setText(current_marker_info.getString("review1"));
+        review2.setText(current_marker_info.getString("review2"));
+        review3.setText(current_marker_info.getString("review3"));
+        review1author.setText(current_marker_info.getString("author1"));
+        review2author.setText(current_marker_info.getString("author2"));
+        review3author.setText(current_marker_info.getString("author3"));
+
+
         if (!peeking_info_pane){
-            BottomSlideOut.animate().translationYBy(-400);
+            BottomSlideOut.animate().translationYBy(-peeking_height);
             peeking_info_pane = true;
         }
 
@@ -179,17 +257,22 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if (peeking_info_pane){
-            BottomSlideOut.animate().translationYBy(400);
+        if (peeking_info_pane && expanded_info_pane) {
+            BottomSlideOut.animate().translationYBy(info_pane_height);
+            peeking_info_pane = false;
+            expanded_info_pane = false;
+        } else if (peeking_info_pane) {
+            BottomSlideOut.animate().translationYBy(peeking_height);
             peeking_info_pane = false;
         }
+
     }
 
     public void toggleExpandInfoPane(View view) {
         if(expanded_info_pane){
-            BottomSlideOut.animate().translationYBy(700);
+            BottomSlideOut.animate().translationYBy(expanded_height);
         }else{
-            BottomSlideOut.animate().translationYBy(-700);
+            BottomSlideOut.animate().translationYBy(-expanded_height);
         }
 
         expanded_info_pane = !expanded_info_pane;
