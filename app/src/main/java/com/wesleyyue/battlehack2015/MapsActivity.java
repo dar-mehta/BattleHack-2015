@@ -333,4 +333,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
 
         expanded_info_pane = !expanded_info_pane;
     }
+
+    private void addBike (View view){
+        Intent intent = new Intent(this, AddBikeActivity.class);
+        startActivity(intent);
+    }
 }
