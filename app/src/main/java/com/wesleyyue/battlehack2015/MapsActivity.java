@@ -135,4 +135,9 @@ public class MapsActivity extends FragmentActivity {
         );
     }
     // End of braintree code
+
+    public void nfcActivity (View view){
+        Intent intent = new Intent(this, NFCActivity.class);
+        startActivity(intent);
+    }
 }

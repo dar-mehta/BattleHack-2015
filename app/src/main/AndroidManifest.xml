@@ -13,6 +13,16 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+<!--     NFC Permissions -->
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -35,9 +45,22 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".BraintreeActivity"-->
-            <!--android:label="Get Name"-->
-            <!--android:theme="@style/AppTheme"/>-->
+        <!-- <activity android:name=".BraintreeActivity" -->
+        <!-- android:label="Get Name" -->
+        <!-- android:theme="@style/AppTheme"/> -->
+        <activity
+            android:name=".NFCActivity"
+            android:label="@string/title_activity_nfc" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/com.devcompany.paymentvendor.fragments" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
